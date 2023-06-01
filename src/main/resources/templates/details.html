@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="main.html" >
+<div layout:fragment="content">
+  <div class="container-fluid mx-auto d-flex flex-wrap p-3">
+    <div class="m-3 p-2 " style="width: 70%" >
+      <div class="column">
+        <form action="/deleteCategory" method="post" th:each="category : ${folder.getCategories()}" >
+          <input type="hidden" name="category_id" th:value="${category.getId()}" >
+          <input type="hidden" name="folder_id" th:value="${folder.getId()}" >
+          <button type="submit" class="btn btn-primary m-2" th:text="${category.getName()} + ' X '"></button>
+        </form>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#AddModal">
+          + Add category
+        </button>
+
+        <!-- Modal -->
+        <form action="/addCategory" method="post">
+          <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <input type="hidden" name="folder_id" th:value="${folder.getId()}" >
+                  <select name = "category_id">
+                    <option  th:each="taskcategory :${taskcategories}" th:value="${taskcategory.getId()}" th:text="${taskcategory.getName()}"></option>
+                  </select>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+    </div>
+
+        <div class="m-3 p-2 " style="width: 70%" >
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddTask">
+            + Add Task
+          </button>
+
+      <!-- Modal -->
+          <form action="/addTask" method="post">
+            <div class="modal fade" id="AddTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="AddTaskLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <input type="hidden" class="form-control" name="folder_id" th:value="${folder.getId()}" >
+                    <input type="text" class="form-control" name="title">
+                    <input type="text" class="form-control" name="description">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add task</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <td>Id</td>
+                <td>Task Name</td>
+                <td>Status</td>
+                <td>Details</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="task :${tasks}">
+                <td th:text="${task.getId()}"></td>
+                <td th:text="${task.getTitle()}"></td>
+                <td th:text="${task.getStatus()}"></td>
+                <td> <a th:href="${'/detailsTasks/'+task.getId()}" style="color: blue">Details</a></td>
+              </tr>
+            </tbody>
+          </table>
+  </div>
+    </div>
+</div>
+</div>
+</html>
